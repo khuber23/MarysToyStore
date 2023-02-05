@@ -1,3 +1,38 @@
+hr {
+    border-top: 2px solid rgba(0,0,0,.1);
+}
+
+h1 {
+    border-bottom: 1px solid rgba(0,0,0,.1);
+    padding-bottom: 10px;
+}
+
+img {
+    border: 5px solid black;
+}
+
+.productStyles {
+    text-align: center;
+    margin-top: 30px;
+}
+
+    .productStyles h3 {
+        font-size: 30px;
+        font-weight: 700;
+    }
+
+    .productStyles p:first-of-type {
+        margin-top: 15px;
+    }
+
+    .productStyles p:last-of-type {
+        font-weight: 500;
+    }
+
+    .productStyles p {
+        font-size: 25px;
+    }
+
 footer {
     color: gray;
 }

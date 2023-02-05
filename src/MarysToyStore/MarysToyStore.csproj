@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <content Remove="dist\**"/>
+    <content Remove="dist\**" />
   </ItemGroup>
   
 </Project>

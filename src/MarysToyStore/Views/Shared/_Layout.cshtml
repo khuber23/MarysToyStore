@@ -1,0 +1,21 @@
+<html>
+<head>
+    <style>:root {--pathBase: "@Context.Request.PathBase";}</style> @* CSS path base variable: use var(--pathBase) when behind reverse proxy. *@
+    <script>const pathBase = "@Context.Request.PathBase";</script> @* JavaScript path base variable: use pathBase when behind reverse proxy. *@
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+     <link href="~/css/site.min.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <div class="container">
+        <h1>Mary's Toy Store</h1>
+        <div>
+            @RenderBody()
+        </div>
+    
+        <footer class="text-center">
+            <hr>
+            © Mary's Toy Store @DateTime.Now.Year
+        </footer>
+    </div>
+</body>
+</html>
