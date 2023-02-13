@@ -11,7 +11,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="publish\**" />
     <content Remove="dist\**" />
+    <Content Remove="publish\**" />
+    <EmbeddedResource Remove="publish\**" />
+    <None Remove="publish\**" />
   </ItemGroup>
   
 </Project>
