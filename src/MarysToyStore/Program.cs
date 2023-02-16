@@ -1,5 +1,7 @@
 global using MarysToyStore;
 global using MarysToyStore.Models;
+using MarysToyStore.Data;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +11,7 @@ builder.Services.AddControllersWithViews();
 // Deserializes the AppConfig section and injects the resulting object - making it available to the rest of our application.
 builder.Services.Configure<AppConfig>(builder.Configuration.GetSection("AppConfig"));
 
+builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 
