@@ -1,6 +1,9 @@
 ﻿using System.Linq;
 using MarysToyStore.Data;
+<<<<<<< HEAD
 using MarysToyStore.Models;
+=======
+>>>>>>> b5f555990d3dc0429685036e54860cd504192632
 
 namespace MarysToyStore.Services
 {
@@ -21,6 +24,7 @@ namespace MarysToyStore.Services
         public Product GetProduct(int id)
         {
             return _dataContext.Products.FirstOrDefault(x => x.Id == id);
+<<<<<<< HEAD
         }
 
         public Product AddProduct(Product product) 
@@ -40,6 +44,8 @@ namespace MarysToyStore.Services
             _dataContext.Brands.Add(brand);
             _dataContext.SaveChanges();
             return brand;
+=======
+>>>>>>> b5f555990d3dc0429685036e54860cd504192632
         }
     }
 }
