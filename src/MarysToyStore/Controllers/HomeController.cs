@@ -2,6 +2,8 @@
 using MarysToyStore.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Microsoft.EntityFrameworkCore;
+using MarysToyStore.Data;
 
 namespace MarysToyStore.Controllers;
 
@@ -14,11 +16,11 @@ public class HomeController : Controller
 
     private readonly DataService _dataService;
 
-    public HomeController(ILogger<HomeController> logger, IOptions<AppConfig> appConfigWrapper)
+    public HomeController(ILogger<HomeController> logger, IOptions<AppConfig> appConfigWrapper, DataContext dataContext)
     {
         _logger = logger;
         _appConfig = appConfigWrapper.Value;
-        _dataService = new DataService();
+        _dataService = new DataService(dataContext);
     }
 
     [Route("")]
