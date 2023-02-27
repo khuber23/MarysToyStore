@@ -12,7 +12,6 @@ public class DataContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-<<<<<<< HEAD
         // Define the relationship between the Products and the Brands.
         modelBuilder.Entity<Product>()
             .HasOne(x => x.Brand)
@@ -38,17 +37,5 @@ public class DataContext : DbContext
 
     public DbSet<Brand> Brands { get; set; }
 
-=======
-        // Specifiy the seed data.
-        modelBuilder.Entity<Product>().HasData(
-                    new Product { Id = 1, Name = "Car", Description = "A toy car that goes really fast.", Price = 3.99m, ImagePath = "/bluecar.jpg" },
-                    new Product { Id = 2, Name = "Ducks", Description = "Toy ducks that float.", Price = 10.99m, ImagePath = "/ducks.jpg" },
-                    new Product { Id = 3, Name = "Legos", Description = "A toy to build your ideas.", Price = 25.99m, ImagePath = "/legos.jpg" },
-                    new Product { Id = 4, Name = "Robot", Description = "An advanced toy that will make anybody happy.", Price = 15.99m, ImagePath = "/robot.jpg" },
-                    new Product { Id = 5, Name = "Teddy", Description = "A soft bear that is comforting to touch.", Price = 29.99m, ImagePath = "/teddy.jpg" }
-        );
-    }
-
->>>>>>> b5f555990d3dc0429685036e54860cd504192632
     public DbSet<Product> Products { get; set; }
 }
