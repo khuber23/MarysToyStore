@@ -34,8 +34,10 @@ public class AdminController : Controller
     [HttpGet("addproduct")]
     public IActionResult AddProduct()
     {
-        ProductViewModel productViewModel = new ProductViewModel();
-        productViewModel.Brands = _dataService.GetBrands();
+        ProductViewModel productViewModel = new()
+        {
+            Brands = _dataService.GetBrands()
+        };
 
         return View(productViewModel);
     }
@@ -46,8 +48,10 @@ public class AdminController : Controller
     {
         if (!ModelState.IsValid)
         {
-            ProductViewModel productViewModel = new ProductViewModel();
-            productViewModel.Brands = _dataService.GetBrands();
+            ProductViewModel productViewModel = new()
+            {
+                Brands = _dataService.GetBrands()
+            };
 
             return View(productViewModel);
         }
