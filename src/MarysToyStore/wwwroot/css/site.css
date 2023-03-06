@@ -1,5 +1,5 @@
-footer {
-    color: gray;
+.field-validation-error {
+    color: red;
 }
 
 hr {
@@ -21,18 +21,31 @@ img {
 }
 
 .productStyles h3 {
-     font-size: 30px;
-     font-weight: 700;
+    font-size: 30px;
+    font-weight: 700;
 }
 
 .productStyles p:first-of-type {
-     margin-top: 15px;
+    margin-top: 15px;
 }
 
 .productStyles p:last-of-type {
-     font-weight: 500;
+    font-weight: 500;
 }
 
 .productStyles p {
-     font-size: 25px;
+    font-size: 25px;
+}
+
+.card {
+    margin-left: auto !important;
+    margin-right: auto !important;
+    margin-bottom: 30px !important;
+    display: inline-block;
+    width: 33%;
+    padding: 0;
+}
+
+footer {
+    color: gray;
 }
