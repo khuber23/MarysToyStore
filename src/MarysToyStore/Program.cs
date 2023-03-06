@@ -1,7 +1,13 @@
+global using MarysToyStore;
+global using MarysToyStore.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Deserializes the AppConfig section and injects the resulting object - making it available to the rest of our application.
+builder.Services.Configure<AppConfig>(builder.Configuration.GetSection("AppConfig"));
 
 var app = builder.Build();
 
