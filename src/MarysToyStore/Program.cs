@@ -2,6 +2,7 @@ global using MarysToyStore;
 global using MarysToyStore.Models;
 using MarysToyStore.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,17 @@ builder.Services.AddControllersWithViews();
 builder.Services.Configure<AppConfig>(builder.Configuration.GetSection("AppConfig"));
 
 builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/sign-in";
+        options.LogoutPath = "/sign-out";
+        options.AccessDeniedPath = "/access-denied";
+        options.Cookie.Name = "UserAuth";
+        options.ExpireTimeSpan = TimeSpan.FromDays(2);
+        options.SlidingExpiration = true;
+    });
 
 var app = builder.Build();
 
@@ -29,6 +41,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseAuthentication();
 
 app.MapControllerRoute(
     name: "default",

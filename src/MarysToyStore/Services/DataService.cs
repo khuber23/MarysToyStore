@@ -14,6 +14,18 @@ namespace MarysToyStore.Services
             _dataContext = dataContext;
         }
 
+        public User AddUser(User user)
+        {
+            _dataContext.Users.Add(user);
+            _dataContext.SaveChanges();
+            return user;
+        }
+
+        public User GetUser(string emailAddress)
+        {
+            return _dataContext.Users.FirstOrDefault(x => x.EmailAddress.ToLower() == emailAddress.ToLower());
+        }
+
         public List<Product> GetProducts()
         {
             return _dataContext.Products.ToList();
