@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using MarysToyStore.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MarysToyStore.Controllers;
 
+[Authorize(Roles = "Admin")]
 [Route("admin")]
 public class AdminController : Controller
 {
