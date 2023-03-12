@@ -22,5 +22,13 @@
     <EmbeddedResource Remove="publish\**" />
     <None Remove="publish\**" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Data\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MarysToyStore.DataAccess\MarysToyStore.DataAccess.csproj" />
+  </ItemGroup>
   
 </Project>

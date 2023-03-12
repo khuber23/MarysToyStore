@@ -1,4 +1,4 @@
-﻿using MarysToyStore.Data;
+﻿using MarysToyStore.DataAccess.Data;
 using MarysToyStore.Models;
 using MarysToyStore.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
