@@ -1,8 +1,8 @@
 global using MarysToyStore;
 global using MarysToyStore.Models;
 global using MarysToyStore.DataAccess;
+global using MarysToyStore.DataAccess.Data;
 global using MarysToyStore.DataAccess.Models;
-using MarysToyStore.DataAccess.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
