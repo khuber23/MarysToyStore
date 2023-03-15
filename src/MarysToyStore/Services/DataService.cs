@@ -1,7 +1,4 @@
-﻿using System.Linq;
-using MarysToyStore.DataAccess.Data;
-using MarysToyStore.Models;
-
+﻿using MarysToyStore.DataAccess;
 
 namespace MarysToyStore.Services
 {

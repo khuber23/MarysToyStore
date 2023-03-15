@@ -1,7 +1,7 @@
-﻿using MarysToyStore.DataAccess.Models;
+﻿using MarysToyStore.DataAccess;
 using Microsoft.EntityFrameworkCore;
 
-namespace MarysToyStore.DataAccess.Data;
+namespace MarysToyStore.DataAccess;
 
 public class DataContext : DbContext
 {

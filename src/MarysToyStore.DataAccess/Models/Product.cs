@@ -1,15 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MarysToyStore.DataAccess.Models
+namespace MarysToyStore.DataAccess
 {
 	public class Product
 	{
 		public int Id { get; set; }
 
-
 		[Required]
 		public string? Name { get; set; }
-
 
 		[Required]
 		[MinLength(20, ErrorMessage = "The description must be longer than 20 characters.")]

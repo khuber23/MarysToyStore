@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MarysToyStore.DataAccess.Models
+namespace MarysToyStore.DataAccess
 {
 	public class User
 	{

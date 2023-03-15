@@ -1,15 +1,14 @@
-﻿using MarysToyStore.DataAccess.Data;
-using MarysToyStore.Models;
-using MarysToyStore.Services;
+﻿using MarysToyStore.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using MarysToyStore.DataAccess;
 
-namespace MarysToyStore.Controllers;
-
+namespace MarysToyStore.Controllers
+{
 	[Authorize]
 	[Route("")]
 	public class AccountController : Controller
@@ -92,7 +91,7 @@ namespace MarysToyStore.Controllers;
 				return View();
 			}
 
-			PasswordHasher<string> passwordHasher = new PasswordHasher<string>();
+			PasswordHasher<string> passwordHasher = new();
 			PasswordVerificationResult passwordVerificationResult =
 				passwordHasher.VerifyHashedPassword(null, user.PasswordHash, loginViewModel.Password);
 
@@ -115,7 +114,7 @@ namespace MarysToyStore.Controllers;
 
 			var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
-			var authProperties = new Microsoft.AspNetCore.Authentication.AuthenticationProperties { };
+			var authProperties = new AuthenticationProperties { };
 
 			await HttpContext.SignInAsync(
 				CookieAuthenticationDefaults.AuthenticationScheme,
@@ -148,3 +147,4 @@ namespace MarysToyStore.Controllers;
 			return View();
 		}
 	}
+}
