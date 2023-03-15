@@ -13,7 +13,7 @@ namespace MarysToyStore.Controllers
 	[Route("")]
 	public class HomeController : Controller
 	{
-		private readonly AppConfig _appConfig;
+		private readonly IOptions<AppConfig> _appConfig;
 
 		private readonly ILogger<HomeController> _logger;
 
@@ -22,7 +22,7 @@ namespace MarysToyStore.Controllers
 		public HomeController(ILogger<HomeController> logger, IOptions<AppConfig> appConfigWrapper, DataContext dataContext)
 		{
 			_logger = logger;
-			_appConfig = appConfigWrapper.Value;
+			_appConfig = appConfigWrapper;
 			_dataService = new DataService(dataContext);
 		}
 

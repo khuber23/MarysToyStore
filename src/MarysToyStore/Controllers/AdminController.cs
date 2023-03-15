@@ -12,7 +12,7 @@ namespace MarysToyStore.Controllers
 	[Route("admin")]
 	public class AdminController : Controller
 	{
-		private readonly AppConfig _appConfig;
+		private readonly IOptions<AppConfig> _appConfig;
 
 		private readonly ILogger<AdminController> _logger;
 
@@ -21,7 +21,7 @@ namespace MarysToyStore.Controllers
 		public AdminController(ILogger<AdminController> logger, IOptions<AppConfig> appConfigWrapper, DataContext dataContext)
 		{
 			_logger = logger;
-			_appConfig = appConfigWrapper.Value;
+			_appConfig = appConfigWrapper;
 			_dataService = new DataService(dataContext);
 		}
 
