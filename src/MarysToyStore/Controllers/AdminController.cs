@@ -89,5 +89,26 @@ namespace MarysToyStore.Controllers
 
 			return RedirectToAction(nameof(Brands));
 		}
+
+		[HttpGet("edit-brand/{id:int}")]
+		public IActionResult EditBrand(int id)
+		{
+			Brand model = _dataService.GetBrand(id);
+
+			return View(model);
+		}
+
+		[HttpPost("edit-brand/{id:int}")]
+		public IActionResult EditBrand(Brand brand)
+		{
+			if (!ModelState.IsValid)
+			{
+				return View();
+			}
+
+			_dataService.UpdateBrand(brand);
+
+			return RedirectToAction(nameof(Brands));
+		}
 	}
 }

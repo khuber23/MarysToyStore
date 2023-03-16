@@ -6,11 +6,13 @@
     <table class="table">
         <tr>
             <th>Name</th>
+            <th>Actions</th>
         </tr>
         @foreach (var item in Model)
         {
             <tr>
                 <td>@item.Name</td>
+                <td><a asp-controller="admin" asp-action="editbrand" asp-route-id="@item.Id">Edit</a></td>
             </tr>
         }
     </table>

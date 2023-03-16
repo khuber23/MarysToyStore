@@ -45,11 +45,23 @@ namespace MarysToyStore.Services
             return _dataContext.Brands.ToList();
         }
 
+        public Brand GetBrand(int id)
+        {
+            return _dataContext.Brands.FirstOrDefault(x => x.Id == id);
+        }
+
         public Brand AddBrand(Brand brand)
         {
             _dataContext.Brands.Add(brand);
             _dataContext.SaveChanges();
             return brand;
         }
+
+        public Brand UpdateBrand(Brand brand)
+        {
+			_dataContext.Brands.Update(brand);
+			_dataContext.SaveChanges();
+            return brand;
+		}
     }
 }
