@@ -26,5 +26,7 @@ namespace MarysToyStore.DataAccess
 		public int? BrandId { get; set; }
 
 		public Brand? Brand { get; set; }
+
+		public List<ProductCategoryProduct>? ProductCategoryProducts { get; set; }
 	}
 }

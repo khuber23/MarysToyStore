@@ -19,6 +19,22 @@ public class DataContext : DbContext
 			.WithMany(x => x.Products)
 			.IsRequired();
 
+		// Define the composite key for ProductCategoryProducts.
+		modelBuilder.Entity<ProductCategoryProduct>()
+			.HasKey(p => new { p.ProductId, p.ProductCategoryId });
+
+		// Define the relationship between the ProductCategoryProducts and the Products.
+		modelBuilder.Entity<ProductCategoryProduct>()
+			.HasOne(pcp => pcp.Product)
+			.WithMany(p => p.ProductCategoryProducts)
+			.HasForeignKey(pcp => pcp.ProductId);
+
+		// Define the relationship between the ProductCategoryProducts and the ProductCaegories.
+		modelBuilder.Entity<ProductCategoryProduct>()
+			.HasOne(pcp => pcp.ProductCategory)
+			.WithMany(p => p.ProductCategoryProducts)
+			.HasForeignKey(pcp => pcp.ProductCategoryId);
+
 		// Specifiy the brand seed data.
 		modelBuilder.Entity<Brand>().HasData(
 			new Brand { Id = 1, Name = "Mattel" },
@@ -34,9 +50,28 @@ public class DataContext : DbContext
 			new Product { Id = 4, Name = "Robot", Description = "An advanced toy that will make anybody happy.", Price = 15.99m, ImagePath = "/robot.jpg", BrandId = 1 },
 			new Product { Id = 5, Name = "Teddy", Description = "A soft bear that is comforting to touch.", Price = 29.99m, ImagePath = "/teddy.jpg", BrandId = 2 }
 		);
+
+		// Specify the product category seed data.
+		modelBuilder.Entity<ProductCategory>().HasData(
+			new ProductCategory { Id = 1, Name = "Sporting Goods" },
+			new ProductCategory { Id = 2, Name = "Home" },
+			new ProductCategory { Id = 3, Name = "Office" },
+			new ProductCategory { Id = 4, Name = "Clothing" },
+			new ProductCategory { Id = 5, Name = "Electronics" }
+		);
+
+		// Specify the product category product seed data.
+		modelBuilder.Entity<ProductCategoryProduct>().HasData(
+			new ProductCategoryProduct { ProductId = 1, ProductCategoryId = 3 },
+			new ProductCategoryProduct { ProductId = 1, ProductCategoryId = 5 }
+		);
 	}
 
 	public DbSet<Brand> Brands { get; set; }
+
+	public DbSet<ProductCategory> ProductCategories { get; set; }
+
+	public DbSet<ProductCategoryProduct> ProductCategoriesProducts { get; set; }
 
 	public DbSet<Product> Products { get; set; }
 
