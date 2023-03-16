@@ -23,6 +23,31 @@ namespace MarysToyStore.Services
             return _dataContext.Users.FirstOrDefault(x => x.EmailAddress.ToLower() == emailAddress.ToLower());
         }
 
+        public List<ProductCategory> GetProductCategories()
+        {
+            return _dataContext.ProductCategories.ToList();
+        }
+
+        public ProductCategory GetProductCategory(int id)
+        {
+            return _dataContext.ProductCategories.FirstOrDefault(x => x.Id == id);
+        }
+
+
+        public ProductCategory AddProductCategory(ProductCategory productCategory)
+        {
+            _dataContext.ProductCategories.Add(productCategory);
+            _dataContext.SaveChanges();
+            return productCategory;
+        }
+
+        public ProductCategory UpdateProductCategory(ProductCategory productCategory)
+        {
+            _dataContext.ProductCategories.Update(productCategory);
+            _dataContext.SaveChanges();
+            return productCategory;
+        }
+
         public List<Product> GetProducts()
         {
             return _dataContext.Products.ToList();
@@ -38,6 +63,13 @@ namespace MarysToyStore.Services
             _dataContext.Products.Add(product);
             _dataContext.SaveChanges();
             return product;
+        }
+
+        public ProductViewModel UpdateProduct(ProductViewModel productViewModel)
+        {
+            _dataContext.Update(productViewModel);
+            _dataContext.SaveChanges();
+            return productViewModel;
         }
 
         public List<Brand> GetBrands()

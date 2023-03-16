@@ -25,7 +25,53 @@ namespace MarysToyStore.Controllers
 			_dataService = new DataService(dataContext);
 		}
 
-		[Route("products")]
+		[Route("productcategories")]
+		public IActionResult ProductCategories()
+		{
+			List<ProductCategory> model = _dataService.GetProductCategories();
+			return View(model);
+        }
+
+        [HttpGet("addproductcategory")]
+        public IActionResult AddProductCategory()
+        { return View(); }
+
+
+        [HttpPost("addproductcategory")]
+        public IActionResult AddProductCategory(ProductCategory productCategory)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
+            _dataService.AddProductCategory(productCategory);
+
+            return RedirectToAction(nameof(ProductCategories));
+        }
+
+        [HttpGet("edit-productCategory/{id:int}")]
+        public IActionResult EditProductCategory(int id)
+        {
+            ProductCategory model = _dataService.GetProductCategory(id);
+
+            return View(model);
+        }
+
+        [HttpPost("edit-productCategory/{id:int}")]
+        public IActionResult EditProductCategory(ProductCategory productCategory)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
+            _dataService.UpdateProductCategory(productCategory);
+
+            return RedirectToAction(nameof(ProductCategories));
+        }
+
+        [Route("products")]
 		public IActionResult Products()
 		{
 			List<Product> model = _dataService.GetProducts();
@@ -63,7 +109,31 @@ namespace MarysToyStore.Controllers
 			return RedirectToAction(nameof(Products));
 		}
 
-		[Route("brands")]
+        [HttpGet("edit-product/{id:int}")]
+        public IActionResult EditProduct(int id)
+        {
+            ProductViewModel productViewModel = new ProductViewModel();
+			productViewModel.Brands = _dataService.GetBrands();
+			productViewModel.Product = _dataService.GetProduct(id);
+			return View(productViewModel);
+        }
+
+        [HttpPost("edit-product/{id:int}")]
+        public IActionResult EditProduct(ProductViewModel productViewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                productViewModel = new ProductViewModel();
+                productViewModel.Brands = _dataService.GetBrands();
+				return View(productViewModel);
+            }
+
+            _dataService.UpdateProduct(productViewModel);
+
+            return RedirectToAction(nameof(Products));
+        }
+
+        [Route("brands")]
 		public IActionResult Brands()
 		{
 			// Need logic to return the list of brands.
