@@ -1,8 +1,9 @@
 ﻿@model IEnumerable<ProductCategory>
 <div>
-    <p>
-        <a asp-controller="Admin" asp-action="AddProductCategory" class="btn btn-primary" role="button">Add Product Category</a>
-    </p>
+    <div class="btn-group">
+         <a asp-controller="Admin" asp-action="AddProductCategory" class="btn btn-primary" role="button">Add</a>
+         <a asp-controller="Admin" asp-action="RestoreProductCategory" class="btn btn-secondary" role="button">Restore</a>
+    </div>
     <table class="table">
         <tr>
             <th>Name</th>
@@ -12,7 +13,8 @@
         {
             <tr>
                 <td>@item.Name</td>
-                <td><a asp-controller="Admin" asp-action="EditProductCategory" asp-route-id="@item.Id">Edit</a></td>
+                <td><a asp-controller="Admin" asp-action="EditProductCategory" asp-route-id="@item.Id">Edit</a>|
+                    <a asp-controller="Admin" asp-action="DeleteProductCategory" asp-route-id="@item.Id">Delete</a></td>
             </tr>
         }
     </table>

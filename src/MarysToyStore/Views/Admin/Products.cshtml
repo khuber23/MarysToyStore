@@ -1,7 +1,8 @@
 @model IEnumerable<Product>
-<div>
+<p>
     <p>
-        <a asp-controller="Admin" asp-action="AddProduct" class="btn btn-primary" role="button">Add Product</a>
+            <a asp-controller="Admin" asp-action="AddProduct" class="btn btn-primary" role="button">Add</a>
+            <a asp-controller="Admin" asp-action="RestoreProduct" class="btn btn-secondary" role="button">Restore</a>
     </p>
     @foreach(var item in Model)
     {
@@ -14,6 +15,7 @@
                     <div class="btn-group">
                         <a class="btn btn-primary" asp-controller="Home" asp-action="Product" asp-route-id="@item.Id">View</a>
                         <a class="btn btn-secondary" asp-controller="Admin" asp-action="EditProduct" asp-route-id="@item.Id">Edit</a>
+                        <a class="btn btn-secondary" asp-controller="Admin" asp-action="DeleteProduct" asp-route-id="@item.Id">Delete</a>
                     </div>
                 </div>
             </div>

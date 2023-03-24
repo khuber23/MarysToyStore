@@ -28,5 +28,8 @@ namespace MarysToyStore.DataAccess
 		public Brand? Brand { get; set; }
 
 		public List<ProductCategoryProduct>? ProductCategoryProducts { get; set; }
-	}
+
+        [Required]
+        public bool IsArchived { get; set; }
+    }
 }

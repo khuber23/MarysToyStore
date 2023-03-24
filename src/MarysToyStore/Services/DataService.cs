@@ -1,4 +1,5 @@
 ﻿using MarysToyStore.DataAccess;
+using Microsoft.EntityFrameworkCore;
 
 namespace MarysToyStore.Services
 {
@@ -25,7 +26,7 @@ namespace MarysToyStore.Services
 
         public List<ProductCategory> GetProductCategories()
         {
-            return _dataContext.ProductCategories.ToList();
+            return _dataContext.ProductCategories.Where(x => x.IsArchived == false).ToList();
         }
 
         public ProductCategory GetProductCategory(int id)
@@ -48,14 +49,39 @@ namespace MarysToyStore.Services
             return productCategory;
         }
 
+        public ProductCategory DeleteProductCategory(int id)
+        {
+            ProductCategory productCategory = GetProductCategory(id);
+            productCategory.IsArchived = true;
+            UpdateProductCategory(productCategory);
+            _dataContext.SaveChanges();
+            return productCategory;
+        }
+
+        public List<ProductCategory> GetDeletedProductCategories()
+        {
+            return _dataContext.ProductCategories.Where(x => x.IsArchived == true).ToList();
+        }
+
+        public ProductCategory RestoreProductCategory(int id)
+        {
+            ProductCategory pc = _dataContext.ProductCategories.FirstOrDefault(pc => pc.Id == id);
+            pc.IsArchived = false;
+            UpdateProductCategory(pc);
+            return pc;
+        }
+
         public List<Product> GetProducts()
         {
-            return _dataContext.Products.ToList();
+            return _dataContext.Products.Where(x => x.IsArchived == false).ToList();
         }
 
         public Product GetProduct(int id)
         {
-            return _dataContext.Products.FirstOrDefault(x => x.Id == id);
+            return _dataContext.Products
+                .Include(p => p.ProductCategoryProducts)
+                .ToList()
+                .Find(x => x.Id == id);
         }
 
         public Product AddProduct(Product product) 
@@ -65,16 +91,39 @@ namespace MarysToyStore.Services
             return product;
         }
 
-        public ProductViewModel UpdateProduct(ProductViewModel productViewModel)
+        public Product UpdateProduct(Product product)
         {
-            _dataContext.Update(productViewModel);
+            _dataContext.RemoveRange(_dataContext.ProductCategoriesProducts.Where(x => x.ProductId == product.Id));
+            _dataContext.Update(product);
             _dataContext.SaveChanges();
-            return productViewModel;
+            return product;
+        }
+
+        public void DeleteProduct(int id)
+        {
+            Product product = GetProduct(id);
+            product.IsArchived = true;
+            UpdateProduct(product);
+            _dataContext.SaveChanges();
+        }
+
+        public List<Product> GetDeletedProducts()
+        {
+            return _dataContext.Products.Where(x => x.IsArchived == true).ToList();
+        }
+
+        public Product RestoreProduct(int id)
+        {
+            Product p = _dataContext.Products.FirstOrDefault(p => p.Id == id);
+            p.IsArchived = false;
+            UpdateProduct(p);
+            return p;
         }
 
         public List<Brand> GetBrands()
         {
-            return _dataContext.Brands.ToList();
+            return _dataContext.Brands.Where(x => x.IsArchived == false).ToList();
+           
         }
 
         public Brand GetBrand(int id)
@@ -95,5 +144,27 @@ namespace MarysToyStore.Services
 			_dataContext.SaveChanges();
             return brand;
 		}
+
+        public Brand DeleteBrand(int id)
+        {
+            Brand brand = GetBrand(id);
+            brand.IsArchived = true;
+            UpdateBrand(brand);
+            _dataContext.SaveChanges();
+            return brand;
+        }
+
+        public List<Brand> GetDeletedBrands()
+        {
+            return _dataContext.Brands.Where(x => x.IsArchived == true).ToList();
+        }
+
+        public Brand RestoreBrand(int id)
+        {
+            Brand b = _dataContext.Brands.FirstOrDefault(b => b.Id == id); // Don't use GetBrand here, that method will exclude the brand we need.
+            b.IsArchived = false;
+            UpdateBrand(b);
+            return b;
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using MarysToyStore.DataAccess;
+using System.ComponentModel.DataAnnotations;
 
 namespace MarysToyStore.Models
 {
@@ -7,5 +8,10 @@ namespace MarysToyStore.Models
         public Product Product { get; set; }
 
         public List<Brand>? Brands { get; set; }
+
+        public List<ProductCategory>? AllProductCategories { get; set; }
+
+        [Display(Name = "Product Categories")]
+        public List<int> SelectedProductCategoryIds { get; set; }
     }
 }

@@ -10,5 +10,8 @@ namespace MarysToyStore.DataAccess
 		public string Name { get; set; }
 
 		public List<ProductCategoryProduct>? ProductCategoryProducts { get; set; }
-	}
+
+        [Required]
+        public bool IsArchived { get; set; }
+    }
 }

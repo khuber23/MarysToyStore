@@ -71,6 +71,33 @@ namespace MarysToyStore.Controllers
             return RedirectToAction(nameof(ProductCategories));
         }
 
+        [HttpGet("delete-productCategory/{id:int}")]
+        public IActionResult DeleteProductCategoryConfirm(int id)
+        {
+            return View(_dataService.GetProductCategory(id));
+        }
+
+        [HttpPost("delete-productCategory/{id:int}")]
+        public IActionResult DeleteProductCategory(int id)
+        {
+            _dataService.DeleteProductCategory(id);
+
+            return RedirectToAction(nameof(ProductCategories));
+        }
+
+        [HttpGet("restore-productCategory")]
+        public IActionResult RestoreProductCategory()
+        {
+            return View(_dataService.GetDeletedProductCategories());
+        }
+
+        [HttpGet("restore-productCategory/{id:int}")]
+        public IActionResult RestoreProductCategory(int id)
+        {
+            _dataService.RestoreProductCategory(id);
+            return RedirectToAction(nameof(ProductCategories));
+        }
+
         [Route("products")]
 		public IActionResult Products()
 		{
@@ -82,9 +109,10 @@ namespace MarysToyStore.Controllers
 		[HttpGet("addproduct")]
 		public IActionResult AddProduct()
 		{
-			ProductViewModel productViewModel = new()
-			{
-				Brands = _dataService.GetBrands()
+            ProductViewModel productViewModel = new()
+            {
+                Brands = _dataService.GetBrands(),
+                AllProductCategories = _dataService.GetProductCategories()
 			};
 
 			return View(productViewModel);
@@ -92,19 +120,26 @@ namespace MarysToyStore.Controllers
 
 
 		[HttpPost("addproduct")]
-		public IActionResult AddProduct(Product product)
+		public IActionResult AddProduct(ProductViewModel productViewModel)
 		{
+            Product product = productViewModel.Product;
 			if (!ModelState.IsValid)
 			{
-				ProductViewModel productViewModel = new()
-				{
-					Brands = _dataService.GetBrands()
-				};
+                productViewModel.Brands = _dataService.GetBrands();
+                productViewModel.AllProductCategories = _dataService.GetProductCategories();
+ 
 
 				return View(productViewModel);
 			}
-
-			_dataService.AddProduct(product);
+            if (productViewModel.SelectedProductCategoryIds != null)
+            {
+                productViewModel.Product.ProductCategoryProducts = new List<ProductCategoryProduct>();
+                foreach (int productCategoryId in productViewModel.SelectedProductCategoryIds)
+                {
+                    productViewModel.Product.ProductCategoryProducts.Add(new ProductCategoryProduct { ProductCategoryId = productCategoryId });
+                }
+            }
+            _dataService.AddProduct(product);
 
 			return RedirectToAction(nameof(Products));
 		}
@@ -115,7 +150,13 @@ namespace MarysToyStore.Controllers
             ProductViewModel productViewModel = new ProductViewModel();
 			productViewModel.Brands = _dataService.GetBrands();
 			productViewModel.Product = _dataService.GetProduct(id);
-			return View(productViewModel);
+            productViewModel.AllProductCategories = _dataService.GetProductCategories();
+            productViewModel.SelectedProductCategoryIds = new List<int>();
+            foreach (ProductCategoryProduct pcp in productViewModel.Product.ProductCategoryProducts)
+            {
+                productViewModel.SelectedProductCategoryIds.Add(pcp.ProductCategoryId);
+            }
+            return View(productViewModel);
         }
 
         [HttpPost("edit-product/{id:int}")]
@@ -123,13 +164,57 @@ namespace MarysToyStore.Controllers
         {
             if (!ModelState.IsValid)
             {
-                productViewModel = new ProductViewModel();
                 productViewModel.Brands = _dataService.GetBrands();
-				return View(productViewModel);
+				productViewModel.Product = _dataService.GetProduct(productViewModel.Product.Id);
+                Product dbProduct = _dataService.GetProduct(productViewModel.Product.Id);
+
+                productViewModel.SelectedProductCategoryIds = new List<int>();
+                foreach (ProductCategoryProduct pcp in dbProduct.ProductCategoryProducts)
+                {
+                    productViewModel.SelectedProductCategoryIds.Add(pcp.ProductCategoryId);
+                }
+
+                productViewModel.AllProductCategories = _dataService.GetProductCategories();
+                return View(productViewModel);
             }
 
-            _dataService.UpdateProduct(productViewModel);
+            if (productViewModel.SelectedProductCategoryIds != null)
+            {
+                productViewModel.Product.ProductCategoryProducts = new List<ProductCategoryProduct>();
+                foreach (int productCategoryId in productViewModel.SelectedProductCategoryIds)
+                {
+                    productViewModel.Product.ProductCategoryProducts.Add(new ProductCategoryProduct { ProductCategoryId = productCategoryId });
+                }
+            }
+            Product product = productViewModel.Product;
+            _dataService.UpdateProduct(product);
+            return RedirectToAction(nameof(Products));
+        }
 
+        [HttpGet("delete-product/{id:int}")]
+        public IActionResult DeleteProductConfirm(int id)
+        {
+            return View(_dataService.GetProduct(id));
+        }
+
+        [HttpPost("delete-product/{id:int}")]
+        public IActionResult DeleteProduct(int id)
+        {
+            _dataService.DeleteProduct(id);
+
+            return RedirectToAction(nameof(Products));
+        }
+
+        [HttpGet("restore-product")]
+        public IActionResult RestoreProduct()
+        {
+            return View(_dataService.GetDeletedProducts());
+        }
+
+        [HttpGet("restore-product/{id:int}")]
+        public IActionResult RestoreProduct(int id)
+        {
+            _dataService.RestoreProduct(id);
             return RedirectToAction(nameof(Products));
         }
 
@@ -180,5 +265,32 @@ namespace MarysToyStore.Controllers
 
 			return RedirectToAction(nameof(Brands));
 		}
-	}
+
+        [HttpGet("delete-brand/{id:int}")]
+        public IActionResult DeleteBrandConfirm(int id)
+        {
+            return View(_dataService.GetBrand(id));
+        }
+
+        [HttpPost("delete-brand/{id:int}")]
+        public IActionResult DeleteBrand(int id)
+        {
+            _dataService.DeleteBrand(id);
+
+            return RedirectToAction(nameof(Brands));
+        }
+
+        [HttpGet("restore-brand")]
+        public IActionResult RestoreBrand()
+		{		
+			return View(_dataService.GetDeletedBrands());
+		}
+
+        [HttpGet("restore-brand/{id:int}")]
+        public IActionResult RestoreBrand(int id)
+		{
+			_dataService.RestoreBrand(id);
+            return RedirectToAction(nameof(Brands));
+        }
+    }
 }
