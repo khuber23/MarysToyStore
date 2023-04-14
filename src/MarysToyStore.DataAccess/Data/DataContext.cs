@@ -13,8 +13,20 @@ public class DataContext : DbContext
 	{
 		base.OnModelCreating(modelBuilder);
 
-		// Define the relationship between the Products and the Brands.
-		modelBuilder.Entity<Product>()
+        // Define the many-to-one relationship between the CartItem and the User.
+        modelBuilder.Entity<CartItem>()
+            .HasOne(c => c.User)
+            .WithMany(u => u.CartItems)
+            .IsRequired();
+
+        // Define the many-to-one relationship between the CartItem and Product.
+        modelBuilder.Entity<CartItem>()
+            .HasOne(c => c.Product)
+            .WithMany(p => p.CartItems)
+            .IsRequired();
+
+        // Define the relationship between the Products and the Brands.
+        modelBuilder.Entity<Product>()
 			.HasOne(x => x.Brand)
 			.WithMany(x => x.Products)
 			.IsRequired();
@@ -76,4 +88,6 @@ public class DataContext : DbContext
 	public DbSet<Product> Products { get; set; }
 
 	public DbSet<User> Users { get; set; }
+
+	public DbSet<CartItem> CartItems { get; set; }
 }

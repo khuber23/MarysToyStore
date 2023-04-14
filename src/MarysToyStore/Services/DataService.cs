@@ -12,6 +12,58 @@ namespace MarysToyStore.Services
             _dataContext = dataContext;
         }
 
+        public CartItem GetCartItem(int userId, int productId)
+        {
+            CartItem cartItem =_dataContext.CartItems
+                .Include(x => x.Product)
+                .FirstOrDefault(x => x.User.Id == userId &&
+                x.ProductId == productId && x.IsArchived == false);
+            return cartItem;
+        }
+
+        public List<CartItem> GetCartItems(int userId)
+        {
+            return _dataContext.CartItems
+                .Where(x => x.User.Id == userId && x.IsArchived == false)
+                .Include(x => x.Product)
+                .ToList();
+        }
+
+        public void UpdateCartItem(CartItem cartItem)
+        {
+            _dataContext.CartItems.Update(cartItem);
+            _dataContext.SaveChanges();
+        }
+
+        public CartItem AddCartItem(int userId, int productId)
+        {
+            CartItem cartItem = GetCartItem(userId, productId);
+            if(cartItem != null)
+            {
+                cartItem.Quantity++;
+                this.UpdateCartItem(cartItem);
+            }
+            else if ( cartItem == null)
+            {
+                cartItem = new CartItem();
+                cartItem.UserId = userId;
+                cartItem.ProductId = productId;
+                cartItem.Quantity = 1;
+                _dataContext.CartItems.Add(cartItem);
+                _dataContext.SaveChanges();
+                return cartItem;
+            }
+            return cartItem;
+        }
+
+        public void DeleteCartItem(int userId, int productId)
+        {
+            CartItem item = GetCartItem(userId, productId);
+                item.IsArchived = true;
+            _dataContext.CartItems.Update(item);
+            _dataContext.SaveChanges();
+        }
+
         public User AddUser(User user)
         {
             _dataContext.Users.Add(user);

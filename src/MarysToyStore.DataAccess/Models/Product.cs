@@ -31,5 +31,7 @@ namespace MarysToyStore.DataAccess
 
         [Required]
         public bool IsArchived { get; set; }
+
+        public List<CartItem>? CartItems { get; set; }
     }
 }

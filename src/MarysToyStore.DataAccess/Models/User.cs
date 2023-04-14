@@ -21,5 +21,7 @@ namespace MarysToyStore.DataAccess
 
 		[Required]
 		public bool IsAdmin { get; set; }
-	}
+
+        public List<CartItem>? CartItems { get; set; }
+    }
 }
