@@ -12,7 +12,26 @@ namespace MarysToyStore.Services
             _dataContext = dataContext;
         }
 
-        public CartItem GetCartItem(int userId, int productId)
+        public List<Order> GetOrders(int userId)
+        {
+            return _dataContext.Orders
+                .Where(x => x.User.Id == userId)
+                .Include(x => x.OrderLines)
+                .ToList();
+                
+        }
+
+        public void AddOrder(Order order)
+        {
+            foreach (OrderLine line in _dataContext.OrderLines)
+            {
+				line.Order = order;
+                line.Product = null;
+			}
+            _dataContext.Orders.Add(order);
+        }
+
+		public CartItem GetCartItem(int userId, int productId)
         {
             CartItem cartItem =_dataContext.CartItems
                 .Include(x => x.Product)

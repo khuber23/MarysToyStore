@@ -47,6 +47,18 @@ public class DataContext : DbContext
 			.WithMany(p => p.ProductCategoryProducts)
 			.HasForeignKey(pcp => pcp.ProductCategoryId);
 
+		// Define the relationship between the OrderLine and Order
+		modelBuilder.Entity<OrderLine>()
+			.HasOne(ol => ol.Order)
+			.WithMany(o => o.OrderLines)
+			.IsRequired();
+
+		// Define the relationship between the OrderLine and Product
+		modelBuilder.Entity<OrderLine>()
+			.HasOne(ol => ol.Product)
+			.WithMany(p => p.OrderLines)
+			.IsRequired();
+
 		// Specifiy the brand seed data.
 		modelBuilder.Entity<Brand>().HasData(
 			new Brand { Id = 1, Name = "Mattel" },
@@ -90,4 +102,8 @@ public class DataContext : DbContext
 	public DbSet<User> Users { get; set; }
 
 	public DbSet<CartItem> CartItems { get; set; }
+
+	public DbSet<OrderLine> OrderLines { get; set; }
+
+	public DbSet<Order> Orders { get; set; }
 }

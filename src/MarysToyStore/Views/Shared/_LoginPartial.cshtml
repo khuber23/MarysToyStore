@@ -3,14 +3,21 @@
 @if (User.Identity.IsAuthenticated)
 {
 	<ul class="navbar-nav ms-auto">
-		<span class="navbar-text">
-			Hello, @User.Identity.Name
-		</span>
-			<vc:Cart></vc:Cart>
-		<li>
-			<a asp-controller="Account" asp-action="Logout" class="nav-link" role="button">Logout</a>
+		<vc:cart></vc:cart>
+
+		<li class="nav-item dropdown">
+			<a class="nav-link dropdown-toggle" href="#" id="profileDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="button">Hello, @User.Identity.Name</a>
+			<ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="profileDropdown">
+				<li>
+					<a asp-controller="Cart" asp-action="OrderHistory" role="button" class="dropdown-item">Orders</a>
+				</li>
+				<li>
+					<a asp-controller="Account" asp-action="Logout" role="button" class="dropdown-item">Logout</a>
+				</li>
+			</ul>
 		</li>
 	</ul>
+
 }
 else
 {

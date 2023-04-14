@@ -33,5 +33,7 @@ namespace MarysToyStore.DataAccess
         public bool IsArchived { get; set; }
 
         public List<CartItem>? CartItems { get; set; }
+
+		public List<OrderLine>? OrderLines { get; set; }
     }
 }
