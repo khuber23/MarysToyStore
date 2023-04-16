@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MarysToyStore.DataAccess
 {
@@ -23,5 +24,15 @@ namespace MarysToyStore.DataAccess
 		public bool IsAdmin { get; set; }
 
         public List<CartItem>? CartItems { get; set; }
+
+		[NotMapped, Display(Name = "Full Name")]
+		public string FullName
+		{
+			get
+			{
+				string fullName = FirstName + " " + LastName;
+				return fullName;
+			}
+		}
     }
 }

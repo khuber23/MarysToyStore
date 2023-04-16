@@ -27,12 +27,13 @@ namespace MarysToyStore.Controllers
 		}
 
 		[Route("")]
-		public IActionResult Index(string sort, string filter)
+		public IActionResult Index(string sort, string filter, int? pageNumber)
 		{
 			//// Add data to the viewbag (making it accessible to the returned view).
 			//ViewBag.ApplicationName = "Mary's Toy Store";
 			//// return new ContentResult { Content = "Hello world!" };
 			//return View();
+			int pageSize = 3;
             List<Product> model = _dataService.GetProducts();
             if (!String.IsNullOrEmpty(filter))
             {
@@ -63,7 +64,7 @@ namespace MarysToyStore.Controllers
             }
             ViewData["PriceSortParm"] = sort == "price_asc" ? "price_desc" : "price_asc";
             ViewData["Filter"] = filter;
-            return View(model);
+            return View(PaginatedList<Product>.Create(model, pageNumber ?? 1, pageSize));
         }
 
 		[Route("about")]

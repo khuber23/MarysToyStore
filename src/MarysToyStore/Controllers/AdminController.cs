@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using MarysToyStore.DataAccess;
 
+
 namespace MarysToyStore.Controllers
 {
 	[Authorize(Roles = "Admin")]
@@ -24,6 +25,33 @@ namespace MarysToyStore.Controllers
 			_appConfig = appConfigWrapper;
 			_dataService = new DataService(dataContext);
 		}
+
+        [HttpGet]
+        [Route("orderdetails/{orderId:int}")]
+        public IActionResult OrderDetails(int orderId)
+        {
+            Order model = _dataService.GetOrder(orderId);
+            return View(model);
+        }
+
+        [HttpPost]
+        [Route("orderdetails/{orderId:int}")]
+        public IActionResult OrderDetails(Order order)
+        {
+			if (!ModelState.IsValid)
+			{
+				return View(order);
+			}
+            _dataService.UpdateOrderStatus(order.Id, order.OrderStatus);
+			return RedirectToAction(nameof(Orders));
+		}
+
+        [HttpGet("orders")]
+        public IActionResult Orders()
+        {
+            List<Order> model = _dataService.GetOrders();
+            return View(model);
+        }
 
 		[Route("productcategories")]
 		public IActionResult ProductCategories()

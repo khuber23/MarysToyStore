@@ -12,13 +12,38 @@ namespace MarysToyStore.Services
             _dataContext = dataContext;
         }
 
-        public List<Order> GetOrders(int userId)
+		public void UpdateOrderStatus(int orderId, OrderStatus orderStatus)
+        {
+			Order order =  _dataContext.Orders
+                .Where(x => x.Id== orderId)
+                .FirstOrDefault();
+            order.OrderStatus = orderStatus;
+			_dataContext.Orders.Update(order);
+			_dataContext.SaveChanges();
+		}
+
+		public Order GetOrder(int orderId)
+        {
+			Order order = _dataContext.Orders
+				 .Include(x => x.OrderLines)
+                 .Include(x => x.User)
+				.FirstOrDefault(x => x.Id == orderId);
+			return order;
+		}
+
+        public List<Order> GetOrders()
+        {
+            return _dataContext.Orders
+                .Include(o => o.OrderLines)
+                .ToList();
+        }
+
+		public List<Order> GetOrders(int userId)
         {
             return _dataContext.Orders
                 .Where(x => x.User.Id == userId)
                 .Include(x => x.OrderLines)
-                .ToList();
-                
+                .ToList();            
         }
 
         public void AddOrder(Order order)

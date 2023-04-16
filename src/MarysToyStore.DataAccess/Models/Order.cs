@@ -10,14 +10,15 @@ public class Order
 	[Required]
 	public int UserId { get; set; }
 
-	[Required]
+	[Required, Display]
 	public OrderStatus OrderStatus { get; set; }
 
+	[Display]
 	public DateTime DateOrdered { get; set; }
 
 	public User? User { get; set; }
 
-	public List<OrderLine>? OrderLines { get; set; }
+	public List<OrderLine> OrderLines { get; set; } = new List<OrderLine>();
 
 	public decimal Cost
 	{
