@@ -27,13 +27,44 @@ namespace MarysToyStore.Controllers
 		}
 
 		[Route("")]
-		public IActionResult Index()
+		public IActionResult Index(string sort, string filter)
 		{
-			// Add data to the viewbag (making it accessible to the returned view).
-			ViewBag.ApplicationName = "Mary's Toy Store";
-			// return new ContentResult { Content = "Hello world!" };
-			return View();
-		}
+			//// Add data to the viewbag (making it accessible to the returned view).
+			//ViewBag.ApplicationName = "Mary's Toy Store";
+			//// return new ContentResult { Content = "Hello world!" };
+			//return View();
+            List<Product> model = _dataService.GetProducts();
+            if (!String.IsNullOrEmpty(filter))
+            {
+                model = model
+                    .Where(p => p.Name.ToLower().Contains(filter.ToLower())
+                        || p.Description.ToLower().Contains(filter.ToLower()))
+                    .ToList();
+            }
+            switch (sort)
+            {
+                case "name_desc":
+                    model = model.OrderByDescending(x => x.Name).ToList();
+                    break;
+                default:
+                    model = model.OrderBy(x => x.Name).ToList();
+                    break;
+            }
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sort) ? "name_desc" : "";
+			switch (sort)
+			{
+				case "price_desc":
+					model = model.OrderByDescending(x=>x.Price).ToList();
+					break;
+				case "price_asc":
+					model = model.OrderBy(x => x.Price).ToList();
+					break;
+
+            }
+            ViewData["PriceSortParm"] = sort == "price_asc" ? "price_desc" : "price_asc";
+            ViewData["Filter"] = filter;
+            return View(model);
+        }
 
 		[Route("about")]
 		public IActionResult About()
@@ -45,14 +76,6 @@ namespace MarysToyStore.Controllers
 		public IActionResult Product(int id)
 		{
 			Product model = _dataService.GetProduct(id);
-
-			return View(model);
-		}
-
-		[Route("products")]
-		public IActionResult Products()
-		{
-			List<Product> model = _dataService.GetProducts();
 
 			return View(model);
 		}

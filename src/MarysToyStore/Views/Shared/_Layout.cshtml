@@ -20,9 +20,6 @@
 					<li class="nav-item">
 						<a asp-controller="Home" asp-action="Index" class="nav-link" role="button">Home</a>
 					</li>
-					<li class="nav-item">
-						<a asp-controller="Home" asp-action="Products" class="nav-link" role="button">Products</a>
-					</li>
 					@if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
 					{
 						<li class="nav-item dropdown">
@@ -43,6 +40,7 @@
 						</li>
 					}
 				</ul>
+				<partial name="_SearchPartial" />
 				<partial name="_LoginPartial" />
 			</div>
 		</div>
