@@ -4,8 +4,17 @@ global using MarysToyStore.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using MarysToyStore.Services;
+using Serilog.Events;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+Log.Logger = new LoggerConfiguration()
+	.ReadFrom.Configuration(builder.Configuration)
+	.CreateLogger();
+
+// Use Serilog when setting up the host instead of its own logger
+builder.Host.UseSerilog();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -54,4 +63,17 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-app.Run();
+try
+{
+	Log.Information("Mary's Toy Store is starting...");
+	app.Run();
+}
+catch (Exception ex)
+{
+	Log.Fatal(ex, "The program terminated unexpectedly.");
+}
+finally
+{
+	Log.Information("Mary's Toy Store is stopping...");
+	Log.CloseAndFlush();
+}

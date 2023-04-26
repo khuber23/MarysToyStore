@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 using System.Security.Claims;
 
 namespace MarysToyStore.Controllers;
@@ -13,14 +14,15 @@ namespace MarysToyStore.Controllers;
 public class CartController : Controller
 {
     private readonly AppConfig _appConfig;
-
     private readonly DataService _dataService;
+	private readonly ILogger<AccountController> _log;
 
-    public CartController(IOptions<AppConfig> appConfigWrapper, DataContext dataContext)
+	public CartController(IOptions<AppConfig> appConfigWrapper, DataContext dataContext, ILogger<AccountController> log)
     {
         _appConfig = appConfigWrapper.Value;
         _dataService = new DataService(dataContext);
-    }
+		_log = log;
+	}
 	private Order BuildOrder(int userId)
 	{
 		Order order = new Order();
@@ -65,7 +67,10 @@ public class CartController : Controller
         {
             _dataService.DeleteCartItem(userId, cartItem.ProductId);
         }
-        return RedirectToAction(nameof(OrderHistory));
+
+		_log.LogInformation($"Created order {order.Id} for user {userId}.");
+
+		return RedirectToAction(nameof(OrderHistory));
 
     }
 

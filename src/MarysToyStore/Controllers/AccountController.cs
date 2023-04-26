@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using MarysToyStore.DataAccess;
+using MarysToyStore.Models;
 
 namespace MarysToyStore.Controllers
 {
@@ -15,12 +15,14 @@ namespace MarysToyStore.Controllers
 	{
 		private readonly DataService _dataService;
 		private readonly UspsService _uspsService;
+		private readonly ILogger<AccountController> _log;
 
-		public AccountController(DataContext dataContext, UspsService uspsService)
+		public AccountController(DataContext dataContext, UspsService uspsService, ILogger<AccountController> log)
 		{
 			// Instantiate an instance of the data service.
 			_dataService = new DataService(dataContext);
 			_uspsService = uspsService;
+			_log = log;
 		}
 
 		[AllowAnonymous]
@@ -61,6 +63,8 @@ namespace MarysToyStore.Controllers
 			};
 
 			_dataService.AddUser(user);
+
+			_log.LogInformation($"The {model.EmailAddress} user has registered.");
 
 			return RedirectToAction(nameof(Login));
 		}
@@ -122,6 +126,9 @@ namespace MarysToyStore.Controllers
 				CookieAuthenticationDefaults.AuthenticationScheme,
 				new ClaimsPrincipal(claimsIdentity),
 				authProperties);
+
+			_log.LogInformation($"Invalid login for {loginViewModel.EmailAddress} ({user.Id}).");
+			_log.LogInformation($"User logged in: {loginViewModel.EmailAddress} ({user.Id}).");
 
 			if (string.IsNullOrEmpty(returnUrl))
 			{
