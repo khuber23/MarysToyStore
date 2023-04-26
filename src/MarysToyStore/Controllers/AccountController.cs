@@ -140,6 +140,87 @@ namespace MarysToyStore.Controllers
 			return RedirectToAction("Index", "Home");
 		}
 
+        [HttpGet("profile")]
+        public IActionResult Profile()
+        {
+            // Get currently logged in user ID from the auth cookie.
+            int userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
+            // Get user.
+            User u = _dataService.GetUser(userId);
+
+            return View(u);
+        }
+
+		[HttpGet("edit-profile")]
+		public IActionResult EditProfile()
+		{
+			// Get user id.
+			int userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
+			// Get user.
+			User u = _dataService.GetUser(userId);
+
+			// Populate view model
+			EditProfileViewModel vm = new EditProfileViewModel()
+			{
+				EmailAddress = u.EmailAddress,
+				FirstName = u.FirstName,
+				LastName = u.LastName,
+				Address = u.Address,
+				Address2 = u.Address2,
+				City = u.City,
+				State = u.State,
+				Zip = u.Zip
+			};
+
+			return View(vm);
+		}
+
+		[HttpPost("edit-profile")]
+		public IActionResult EditProfile(EditProfileViewModel vm)
+		{
+			if (!ModelState.IsValid)
+			{
+				return View(vm);
+			}
+
+			// Get current user.
+			User current = _dataService.GetUser(Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value));
+
+			PasswordHasher<string> hasher = new PasswordHasher<string>();
+
+			// Confirm password.
+			if (hasher.VerifyHashedPassword(null, current.PasswordHash, vm.OldPassword) == PasswordVerificationResult.Failed)
+			{
+				ModelState.AddModelError("OldPassword", "Your password is incorrect.");
+
+				return View(vm);
+			}
+
+			// Set user fields.
+			current.FirstName = vm.FirstName;
+			current.LastName = vm.LastName;
+			current.EmailAddress = vm.EmailAddress;
+			current.Address = vm.Address;
+			current.Address2 = vm.Address2;
+			current.City = vm.City;
+			current.State = vm.State;
+			current.Zip = vm.Zip;
+
+			// Check if we should be updating the password.
+			if (!string.IsNullOrEmpty(vm.NewPassword))
+			{
+				// Hash password.
+				current.PasswordHash = hasher.HashPassword(null, vm.NewPassword);
+			}
+
+			// Update.
+			_dataService.UpdateUser(current);
+
+			return RedirectToAction(nameof(Profile));
+		}
+
 		[AllowAnonymous]
 		[Route("access-denied")]
 		public IActionResult AccessDenied()

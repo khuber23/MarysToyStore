@@ -17,6 +17,18 @@ namespace MarysToyStore.DataAccess
 		[DataType(DataType.EmailAddress)]
 		public string? EmailAddress { get; set; }
 
+		[Display(Name = "Mailing Address")]
+		public string? Address { get; set; }
+
+		[Display(Name = "Apt or Suite Number")]
+		public string? Address2 { get; set; }
+
+		public string? City { get; set; }
+
+		public string? State { get; set; }
+
+		public string? Zip { get; set; }
+
 		[Required]
 		public string? PasswordHash { get; set; }
 

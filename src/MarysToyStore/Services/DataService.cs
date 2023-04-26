@@ -12,7 +12,20 @@ namespace MarysToyStore.Services
             _dataContext = dataContext;
         }
 
-		public void UpdateOrderStatus(int orderId, OrderStatus orderStatus)
+		public void UpdateUser(User u)
+		{
+			_dataContext.Users.Update(u);
+			_dataContext.SaveChanges();
+		}
+
+		public User GetUser(int id)
+        {
+            return _dataContext.Users
+                .AsNoTracking()
+                .FirstOrDefault(u => u.Id == id);
+        }
+
+        public void UpdateOrderStatus(int orderId, OrderStatus orderStatus)
         {
 			Order order =  _dataContext.Orders
                 .Where(x => x.Id== orderId)
