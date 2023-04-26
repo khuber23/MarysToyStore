@@ -14,11 +14,13 @@ namespace MarysToyStore.Controllers
 	public class AccountController : Controller
 	{
 		private readonly DataService _dataService;
+		private readonly UspsService _uspsService;
 
-		public AccountController(DataContext dataContext)
+		public AccountController(DataContext dataContext, UspsService uspsService)
 		{
 			// Instantiate an instance of the data service.
 			_dataService = new DataService(dataContext);
+			_uspsService = uspsService;
 		}
 
 		[AllowAnonymous]
@@ -195,6 +197,14 @@ namespace MarysToyStore.Controllers
 			{
 				ModelState.AddModelError("OldPassword", "Your password is incorrect.");
 
+				return View(vm);
+			}
+
+			// Validate address.
+			bool addressVerified = _uspsService.ValidateAddress(vm.Address, vm.Address2, vm.City, vm.State, vm.Zip).Result;
+			if (!addressVerified)
+			{
+				ModelState.AddModelError("Address", "The address you entered is invalid.");
 				return View(vm);
 			}
 

@@ -3,6 +3,7 @@ global using MarysToyStore.Models;
 global using MarysToyStore.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using MarysToyStore.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +25,11 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.ExpireTimeSpan = TimeSpan.FromDays(2);
         options.SlidingExpiration = true;
     });
+
+// Add USPS Service to DI.
+builder.Services.AddSingleton<UspsService>(new UspsService(
+	builder.Configuration.GetValue<string>("UspsAddressVerificationUrl"),
+	builder.Configuration.GetValue<string>("UspsToken")));
 
 var app = builder.Build();
 
